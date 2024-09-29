@@ -1,0 +1,2 @@
+[jenkins_master]
+54.197.211.216 ansible_user=ubuntu

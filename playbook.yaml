@@ -1,0 +1,81 @@
+---
+- name: Install Jenkins and Configure Nginx as Reverse Proxy
+  hosts: jenkins_master
+  become: yes
+  tasks:
+
+    - name: add jenkins key 
+      apt_key:
+        url:  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+        state: present 
+
+    - name: add jenkins repo 
+      apt_repository:
+        repo: 'deb https://pkg.jenkins.io/debian-stable binary/'
+        state: present 
+
+    - name: install java
+      apt: 
+        name: openjdk-11-jre
+        state: present
+
+    - name: install jenkins
+      apt: 
+        name: jenkins 
+        state: present 
+
+    - name: start jenkins service 
+      service: 
+        name: jenkins 
+        state: started 
+
+    - name: enable jenkins to start at boot time 
+      service: 
+        name: jenkins 
+        enabled: yes 
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Configure Nginx reverse proxy for Jenkins
+      copy:
+        dest: /etc/nginx/sites-available/jenkins
+        content: |
+          server {
+              listen 80;
+              server_name jenkins_master;
+
+              location / {
+                  proxy_pass http://localhost:8080;
+                  proxy_set_header Host $host;
+                  proxy_set_header X-Real-IP $remote_addr;
+                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto $scheme;
+              }
+          }
+
+    - name: Enable Jenkins Nginx site
+      file:
+        src: /etc/nginx/sites-available/jenkins
+        dest: /etc/nginx/sites-enabled/jenkins
+        state: link
+        force: yes
+
+    - name: Remove default Nginx configuration
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+
+    - name: Restart Nginx
+      systemd:
+        name: nginx
+        state: restarted
+
+    - name: Ensure Nginx is running and enabled
+      systemd:
+        name: nginx
+        enabled: true
+        state: started
