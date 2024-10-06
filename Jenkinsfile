@@ -27,7 +27,7 @@ pipeline {
             steps {
                 script {
                     def app = docker.image('yevhent/test_step3')
-                    app.inside('--entrypoint="" -v /home/vagrant/opt/jenkins/workspace/Step2-test-pipeline:/app -w /app') {
+                    app.inside('--entrypoint="" -v /home/ec2-user/opt/jenkins/workspace/Step2-test-pipeline:/app -w /app') {
                         sh 'npm test'
                     }
                 }
@@ -43,7 +43,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', 'docker_log_pass') {
-                        def customImage = docker.image('yevhent/test_step2')
+                        def customImage = docker.image('yevhent/test_step3')
                         customImage.push('latest')
                     }
                 }
