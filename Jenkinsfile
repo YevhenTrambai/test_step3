@@ -1,5 +1,5 @@
 Dpipeline {
-    agent { label 'jenkins_worker' }
+    agent { label 'Jenkins-worker' }
 
     stages {
         stage('Pull Code') {
