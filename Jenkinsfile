@@ -1,10 +1,10 @@
-pipeline {
+Dpipeline {
     agent { label 'jenkins_worker' }
 
     stages {
         stage('Pull Code') {
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: 'main']], userRemoteConfigs: [[url: 'git@github.com:YevhenTrambai/test-step2.git', credentialsId: 'GIT_SSH_KEY']]])
+                checkout([$class: 'GitSCM', branches: [[name: 'main']], userRemoteConfigs: [[url: 'git@github.com:YevhenTrambai/test-step2.git', credentialsId: 'GIT_CRED']]])
             }
         }
 
