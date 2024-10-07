@@ -33,7 +33,7 @@ resource "aws_instance" "jenkins_master" {
   instance_type               = var.instance_type_jk_master
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.public_subnet.id
-  security_groups             = [aws_security_group.jenkins_http_https_sg.id, aws_security_group.jenkins_ssh_sg.id, aws_security_group.jenkins_worker_port]
+  security_groups             = [aws_security_group.jenkins_http_https_sg.id, aws_security_group.jenkins_ssh_sg.id, aws_security_group.jenkins_worker_port.id]
   key_name                    = aws_key_pair.jenkins_key.key_name
 
   user_data = <<-EOF
@@ -65,7 +65,7 @@ resource "aws_spot_instance_request" "jenkins_worker" {
               #!/bin/bash
               echo "${aws_key_pair.jenkins_key.public_key}" > /home/ubuntu/.ssh/authorized_keys
               sudo apt update
-              sudo apt install -y openjdk-11-jdk
+              sudo apt install -y openjdk-17-jdk nodejs npm
               EOF
 
   tags = {
