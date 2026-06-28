@@ -1,0 +1,23 @@
+{
+  "name": "crm-tat-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for searching and analyzing tour-operator offers in the TAT.ua agent CRM (crm.tat.ua/tf)",
+  "type": "module",
+  "main": "src/mcp-server.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "recon": "node scripts/recon.js",
+    "login": "node -e \"import('./src/auth.js').then(m=>m.ensureSession({headless:false}).then(()=>console.log('session OK')))\"",
+    "search": "node scripts/search-cli.js",
+    "start": "node src/mcp-server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "better-sqlite3": "^11.3.0",
+    "dotenv": "^16.4.5",
+    "playwright": "^1.48.0"
+  }
+}

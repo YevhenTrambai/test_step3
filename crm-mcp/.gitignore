@@ -1,0 +1,15 @@
+# Secrets — never commit
+.env
+
+# Cached browser session (cookies/tokens) — sensitive
+.auth/
+
+# Local history database
+.data/
+*.sqlite
+*.sqlite-journal
+
+# Recon dumps may contain session data
+recon-dumps/
+
+node_modules/
